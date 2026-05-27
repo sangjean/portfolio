@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김상진 | 개발자 포트폴리오</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="컴퓨터공학 전공생 김상진의 포트폴리오. 이론을 넘어 시스템 메커니즘을 시각화하고 견고하고 안전한 소프트웨어를 개발합니다.">
+  <meta name="keywords" content="김상진, 포트폴리오, 컴퓨터공학, C++, PHP, MFC, 생산자소비자, 한화이글스">
+  <meta name="author" content="김상진 (Kim Sang-jin)">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* CSS RESET & VARIABLES */
+    :root {
+      --bg-primary: #000000;         /* Pitch Black Background */
+      --bg-secondary: #161617;       /* Apple Dark Grey Background */
+      --bg-card: #1c1c1e;            /* Dark Card Background */
+      --bg-card-hover: #2c2c2e;
+      --accent-orange: #ff9f0a;      /* Apple System Orange Accent */
+      --accent-blue: #ff9f0a;        /* Map other accents to orange */
+      --accent-cyan: #ff9f0a;        /* Map other accents to orange */
+      --text-primary: #ffffff;       /* Pure White Text */
+      --text-secondary: #ff9f0a;     /* Orange Secondary Text */
+      --text-muted: #d1d1d6;         /* Brightened Apple Grey for better readability on dark background */
+      --border-color: #2c2c2e;       /* Dark Divider Line */
+      --font-heading: -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      --transition-smooth: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: auto; /* Disabled to prevent conflicts with custom JS scroll animations */
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    /* Ambient glowing background circles (Disabled for Minimalist Apple Theme) */
+    .blur-bg {
+      display: none;
+    }
+
+    .blur-bg-1 {
+      top: -10%;
+      left: -10%;
+    }
+
+    .blur-bg-2 {
+      display: none;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(50px, -50px) scale(1.1); }
+      100% { transform: translate(-30px, 30px) scale(0.9); }
+    }
+
+    /* Interactive Canvas Background */
+    #hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.15; /* Subdued on dark background */
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2c2c2e;
+      border-radius: 5px;
+      border: 2px solid var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-orange);
+    }
+
+    /* Common Layout & Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      color: var(--text-muted);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition-smooth);
+    }
+
+    section {
+      padding: 100px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    section.reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 50px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-orange);
+      border-radius: 1px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 980px; /* Apple Pill Button */
+      font-weight: 500;
+      font-family: var(--font-heading);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      border: none;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background: var(--accent-orange); /* Orange Point color */
+      color: #000000;                  /* Black text */
+    }
+
+    .btn-primary:hover {
+      background: #ffb340;
+      transform: scale(1.02);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--accent-orange);
+      border: 1px solid var(--accent-orange);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 159, 10, 0.1);
+      border-color: var(--accent-orange);
+      transform: scale(1.02);
+    }
+
+    .btn-warning {
+      background: #222222;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-warning:hover {
+      background: #333333;
+      transform: scale(1.02);
+    }
+
+    .btn-cyan {
+      background: #ffffff;
+      color: #000000;
+    }
+    .btn-cyan:hover {
+      background: #e5e5e5;
+      transform: scale(1.02);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: #ff3b30;
+      border: 1px solid #ff3b30;
+    }
+    .btn-danger:hover {
+      background: rgba(255, 59, 48, 0.1);
+      transform: scale(1.02);
+    }
+
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* BADGES */
+    .badge-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 980px; /* Apple Pill Badge */
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--accent-orange);
+    }
+
+    .badge-blue {
+      color: var(--accent-orange);
+      border-color: rgba(255, 159, 10, 0.3);
+      background: rgba(255, 159, 10, 0.08);
+    }
+    .badge-cyan {
+      color: var(--accent-orange);
+      border-color: rgba(255, 159, 10, 0.3);
+      background: rgba(255, 159, 10, 0.08);
+    }
+
+    /* GLASS CARD STYLE */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      transition: var(--transition-smooth);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .glass-card:hover {
+      border-color: var(--accent-orange);
+      box-shadow: 0 8px 30px rgba(255, 159, 10, 0.15);
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+    }
+
+    .logo {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-heading);
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      padding: 5px 0;
+      color: var(--text-muted);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent-orange);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: var(--accent-orange);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        padding: 0 20px;
+        gap: 15px;
+        align-items: center;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .nav-links.open {
+        max-height: 300px;
+        opacity: 1;
+        padding: 20px;
+        pointer-events: auto;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+    }
+
+    /* ==========================================================================
+       HERO SECTION
+       ========================================================================== */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 120px;
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero-title {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .hero-name {
+      font-size: 5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .hero-desc {
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      margin-bottom: 40px;
+      text-align: justify;
+      color: var(--text-muted);
+    }
+
+    .highlight {
+      background: rgba(255, 159, 10, 0.12); /* Soft orange highlighter background */
+      border: 1px solid rgba(255, 159, 10, 0.25);
+      color: var(--accent-orange);
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      transition: var(--transition-smooth);
+      display: inline-block;
+    }
+
+    .highlight:hover {
+      background: rgba(255, 159, 10, 0.22);
+      border-color: rgba(255, 159, 10, 0.45);
+      box-shadow: 0 0 12px rgba(255, 159, 10, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      animation: bounce 2s infinite;
+      cursor: pointer;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+      40% { transform: translateY(-10px) translateX(-50%); }
+      60% { transform: translateY(-5px) translateX(-50%); }
+    }
+
+    @media (max-width: 768px) {
+      .hero-name {
+        font-size: 3.5rem;
+      }
+      .hero-desc {
+        font-size: 1.4rem;
+      }
+      .hero-sub {
+        font-size: 1rem;
+      }
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      .hero-actions .btn {
+        width: 100%;
+      }
+    }
+
+    /* ==========================================================================
+       ABOUT ME & SKILLS SECTION
+       ========================================================================== */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .profile-card {
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: var(--accent-orange);
+    }
+
+    .profile-name {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .profile-details {
+      list-style: none;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .profile-details li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .profile-details li i {
+      color: var(--accent-orange);
+      width: 20px;
+      text-align: center;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .skill-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .skill-header i {
+      font-size: 1.5rem;
+      color: var(--accent-orange);
+    }
+
+    .skill-header h3 {
+      font-size: 1.2rem;
+      font-family: var(--font-heading);
+      color: var(--text-primary);
+    }
+
+    .skill-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .skill-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .skill-value {
+      font-weight: 600;
+      color: var(--accent-orange);
+    }
+
+    /* Interactive Skill Glow on Hover */
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transition: var(--transition-smooth);
+    }
+
+    .skill-card:hover::before {
+      background: var(--accent-orange);
+    }
+
+    @media (max-width: 992px) {
+      .about-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ==========================================================================
+       PROJECTS SECTION
+       ========================================================================== */
+    .projects-container {
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      overflow: hidden;
+    }
+
+    .project-card.reversed {
+      grid-template-columns: 1.2fr 1fr;
+    }
+
+    .project-image-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      height: 100%;
+      min-height: 250px;
+      position: relative;
+    }
+
+    .project-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition-smooth);
+    }
+
+    .project-card:hover .project-image {
+      transform: scale(1.05);
+    }
+
+    .project-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .project-title {
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .project-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      text-align: justify;
+    }
+
+    .project-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .project-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .project-features li i {
+      color: var(--accent-orange); /* Orange checkmark icon */
+      margin-top: 4px;
+      font-size: 0.8rem;
+    }
+
+    .project-features li strong {
+      color: var(--text-primary); /* High contrast bold keywords */
+    }
+
+    /* Interactive simulator layout within the MFC Project Card */
+    .simulator-box {
+      grid-column: 1 / -1;
+      margin-top: 30px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 30px;
+    }
+
+    .simulator-container {
+      background: #161617;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px;
+    }
+
+    .simulator-title {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+    }
+
+    .simulator-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .simulator-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-row input {
+      flex: 1;
+      background: #020617;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 10px;
+      color: white;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    .input-row input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .controls-row .btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px 15px;
+      font-size: 0.85rem;
+    }
+
+    .speed-control {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .speed-control label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .speed-control input[type="range"] {
+      width: 100%;
+      height: 4px;
+      background: #1e293b;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .logs-console {
+      background: #020617;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .console-header {
+      background: #0f172a;
+      padding: 8px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .console-body {
+      height: 150px;
+      overflow-y: auto;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      scroll-behavior: smooth;
+    }
+
+    .log-item {
+      color: #38bdf8;
+    }
+    .log-item.produce { color: #ffffff; font-weight: bold; }
+    .log-item.consume { color: #a3a3a3; }
+    .log-item.wait { color: #ffffff; text-decoration: underline; }
+    .log-item.system { color: #737373; }
+    .log-item.wake { color: #ffffff; font-weight: bold; }
+
+    /* Visualizer Panel */
+    .simulator-visualizer {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .buffer-display-area {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circular-buffer-wrap {
+      position: relative;
+      width: 250px;
+      height: 250px;
+    }
+
+    .circular-buffer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .buffer-slot {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      left: calc(50% - 22px);
+      top: calc(50% - 22px);
+      transition: all 0.3s ease;
+    }
+
+    .buffer-slot.filled {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #000000;
+    }
+
+    .buffer-slot.active-in {
+      border-color: #ffffff !important;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    }
+
+    .buffer-slot.active-out {
+      border-color: #888888 !important;
+      box-shadow: 0 0 8px rgba(136, 136, 136, 0.4);
+    }
+
+    .buffer-slot.active-both {
+      border-color: #ffffff !important;
+      background: #ffffff !important;
+      color: #000000 !important;
+      outline: 2px solid #ffffff;
+    }
+
+    .buffer-slot-index {
+      font-size: 0.65rem;
+      opacity: 0.6;
+    }
+
+    .pointers-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 5;
+    }
+
+    .pointer-status {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 980px; /* Pill */
+      font-weight: 500;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .pointer-in {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .pointer-out {
+      color: #888888;
+      border-color: rgba(136, 136, 136, 0.4);
+    }
+
+    .semaphore-dashboard {
+      display: flex;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .sem-card {
+      flex: 1;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .sem-title {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-family: var(--font-heading);
+    }
+
+    .sem-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 4px 0;
+    }
+
+    .sem-desc {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+    }
+
+    .queues-container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .queue-box {
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .queue-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    .queue-title i {
+      font-size: 0.65rem;
+      color: var(--accent-cyan);
+    }
+
+    .queue-list {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-height: 25px;
+      align-items: center;
+    }
+
+    .queue-item {
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      border-radius: 3px;
+      font-family: monospace;
+      font-weight: 600;
+    }
+
+    .queue-item.producer-node {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .queue-item.consumer-node {
+      background: rgba(255, 255, 255, 0.05);
+      color: #a3a3a3;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .empty-queue-msg {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      opacity: 0.5;
+    }
+
+    @media (max-width: 992px) {
+      .project-card, .project-card.reversed {
+        grid-template-columns: 1fr;
+      }
+      .project-image-wrap {
+        height: 250px;
+      }
+      .simulator-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ==========================================================================
+       CONTACT SECTION
+       ========================================================================== */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 50px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--accent-orange);
+      transition: var(--transition-smooth);
+    }
+
+    .contact-item:hover .contact-icon {
+      color: #000000;
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      transform: scale(1.05);
+    }
+
+    .contact-details h4 {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .contact-details p {
+      font-size: 1rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .form-control {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      color: white;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      width: 100%;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-orange);
+      box-shadow: 0 0 15px rgba(255, 159, 10, 0.25);
+    }
+
+    textarea.form-control {
+      height: 150px;
+      resize: vertical;
+    }
+
+    @media (max-width: 768px) {
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: rgba(22, 22, 23, 0.95);
+      border: 1px solid var(--accent-orange);
+      border-radius: 8px;
+      padding: 15px 25px;
+      color: white;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      border-color: #30d158;
+    }
+    .toast.success i {
+      color: #30d158;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .footer-copyright {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: rgba(148, 163, 184, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Blur Blops -->
+  <div class="blur-bg blur-bg-1"></div>
+  <div class="blur-bg blur-bg-2"></div>
+
+  <!-- Interactive Canvas mesh background -->
+  <canvas id="hero-canvas"></canvas>
+
+  <!-- Navigation Header -->
+  <header>
+    <div class="nav-container">
+      <a href="#home" class="logo" id="logo-nav">SANGJIN.K</a>
+      <button class="mobile-menu-btn" id="mobile-toggle" aria-label="메뉴 열기">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <ul class="nav-links" id="nav-menu">
+        <li><a href="#home" class="nav-item active" id="nav-home">Home</a></li>
+        <li><a href="#about" class="nav-item" id="nav-about">About Me</a></li>
+        <li><a href="#projects" class="nav-item" id="nav-projects">Projects</a></li>
+        <li><a href="#contact" class="nav-item" id="nav-contact">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="hero-name">김상진</span>
+        <span class="hero-desc">이론을 넘어 메커니즘을 시각화하여 가치를 만드는 개발자</span>
+      </h1>
+      <p class="hero-sub">
+        안녕하세요! 저는 <span class="highlight">복잡한 시스템 메커니즘의 구현과 시각화</span>, 그리고 <span class="highlight">동적인 웹 아키텍처 설계</span>에 깊은 열정을 가진 컴퓨터공학도입니다. 
+        프로젝트를 구축할 때, 다양한 엣지 케이스를 꼼꼼히 살피고 사용자 예외 상황에 확실하게 대처해 항상 <span class="highlight">안전하고 신뢰도 높은 소프트웨어</span>를 개발하고자 노력합니다. 
+        까다로운 개발 난제나 시스템 버그를 겪게 되었을 때는 깊이 연구하고 분석하는 끈기를 무기 삼아 <span class="highlight">가장 군더더기 없고 최적화된 설계 구조의 해답</span>을 끌어냅니다.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary" id="hero-to-projects"><i class="fa-solid fa-cube"></i> 프로젝트 보기</a>
+        <a href="#contact" class="btn btn-secondary" id="hero-to-contact"><i class="fa-solid fa-envelope"></i> 연락하기</a>
+      </div>
+    </div>
+    <div class="scroll-indicator" id="scroll-arrow" aria-label="아래로 스크롤">
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+  </section>
+
+  <!-- About Me & Skills Section -->
+  <section id="about">
+    <h2 class="section-title">About Me & Skills</h2>
+    <div class="about-layout">
+      <!-- Profile Card -->
+      <div class="glass-card profile-card">
+        <div class="profile-avatar">
+          <i class="fa-solid fa-user-gear"></i>
+        </div>
+        <h3 class="profile-name">김상진</h3>
+        <p style="color: var(--accent-blue); font-weight: 500; font-size: 0.95rem; margin-bottom: 20px;">Computer Science & Engineering</p>
+        <ul class="profile-details">
+          <li>
+            <i class="fa-solid fa-id-card"></i>
+            <span>학번: 2022136020</span>
+          </li>
+          <li>
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>전공: 컴퓨터공학부</span>
+          </li>
+          <li>
+            <i class="fa-solid fa-envelope"></i>
+            <span>이메일: dev.sangjin.kim@gmail.com</span>
+          </li>
+          <li>
+            <i class="fa-brands fa-github"></i>
+            <a href="https://github.com/sangjin-kim" target="_blank" rel="noopener noreferrer" style="color: var(--accent-cyan)">github.com/sangjin-kim</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Skills Cards Grid -->
+      <div class="skills-grid">
+        <!-- Languages Card -->
+        <div class="glass-card skill-card">
+          <div class="skill-header">
+            <i class="fa-solid fa-code"></i>
+            <h3>Languages</h3>
+          </div>
+          <ul class="skill-list">
+            <li><span>C++</span> <span class="skill-value">Advanced</span></li>
+            <li><span>PHP</span> <span class="skill-value">Intermediate</span></li>
+            <li><span>JavaScript (ES6+)</span> <span class="skill-value">Intermediate</span></li>
+            <li><span>HTML5 / CSS3</span> <span class="skill-value">Advanced</span></li>
+          </ul>
+        </div>
+
+        <!-- Frameworks & Tools Card -->
+        <div class="glass-card skill-card">
+          <div class="skill-header">
+            <i class="fa-solid fa-cubes"></i>
+            <h3>Frameworks & Tools</h3>
+          </div>
+          <ul class="skill-list">
+            <li><span>MFC (Microsoft Foundation Class)</span> <span class="skill-value">Advanced</span></li>
+            <li><span>Apache Web Server</span> <span class="skill-value">Intermediate</span></li>
+            <li><span>XAMPP / WampServer</span> <span class="skill-value">Intermediate</span></li>
+            <li><span>Git & GitHub</span> <span class="skill-value">Intermediate</span></li>
+          </ul>
+        </div>
+
+        <!-- Database Card -->
+        <div class="glass-card skill-card">
+          <div class="skill-header">
+            <i class="fa-solid fa-database"></i>
+            <h3>Database</h3>
+          </div>
+          <ul class="skill-list">
+            <li><span>MySQL</span> <span class="skill-value">Intermediate</span></li>
+            <li><span>Relational DB Design</span> <span class="skill-value">Intermediate</span></li>
+            <li><span>SQL Query Optimization</span> <span class="skill-value">Intermediate</span></li>
+            <li><span>INNER JOIN / Relationships</span> <span class="skill-value">Advanced</span></li>
+          </ul>
+        </div>
+
+        <!-- Core CS Card -->
+        <div class="glass-card skill-card">
+          <div class="skill-header">
+            <i class="fa-solid fa-microchip"></i>
+            <h3>Core CS</h3>
+          </div>
+          <ul class="skill-list">
+            <li><span>Operating Systems</span> <span class="skill-value">Advanced</span></li>
+            <li><span>Semaphore Synchronization</span> <span class="skill-value">Advanced</span></li>
+            <li><span>Mutual Exclusion Process Control</span> <span class="skill-value">Advanced</span></li>
+            <li><span>Data Structures & Algorithms</span> <span class="skill-value">Intermediate</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-container">
+      
+      <!-- Project 1: Hanwha Eagles Fan Page -->
+      <div class="glass-card project-card">
+        <div class="project-image-wrap">
+          <img src="assets/hanwha_project.png" alt="Hanwha Eagles Fan Page Showcase Image" class="project-image">
+        </div>
+        <div class="project-info">
+          <div class="badge-container">
+            <span class="badge badge-cyan">PHP</span>
+            <span class="badge badge-cyan">MySQL</span>
+            <span class="badge badge-cyan">Apache</span>
+            <span class="badge badge-cyan">HTML5/CSS3</span>
+            <span class="badge badge-cyan">JavaScript</span>
+          </div>
+          <h3 class="project-title">
+            <span>⚾ 동적 상호작용 기반 '한화 이글스 팬 페이지'</span>
+          </h3>
+          <p class="project-desc">
+            야구팬들을 위해 동적 기능과 커뮤니티 공간을 제공하는 웹 사이트입니다. Apache 배포 환경에서 백엔드 로직(PHP)과 데이터베이스(MySQL)를 결합하여 개발하였으며, 스케줄러를 통한 매치 일정 자동화 및 세션 기반 권한 통제를 구축했습니다.
+          </p>
+          <div style="margin-top: 15px;">
+            <a href="project-hanwha-eagles.html" class="btn btn-primary">자세히 보기 <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2: Producer-Consumer Problem Simulator -->
+      <div class="glass-card project-card reversed">
+        <div class="project-info">
+          <div class="badge-container">
+            <span class="badge badge-blue">C++</span>
+            <span class="badge badge-blue">MFC</span>
+            <span class="badge badge-blue">Operating Systems</span>
+          </div>
+          <h3 class="project-title">
+            <span>🔄 원형 다중 버퍼 생산자-소비자 시뮬레이터</span>
+          </h3>
+          <p class="project-desc">
+            운영체제의 핵심 동기화 이슈인 '생산자-소비자 문제'를 시각적으로 시뮬레이션하는 C++ MFC 데스크톱 응용 프로그램입니다. 버퍼 데이터 유무, 포인터 인덱스 및 세마포어 동작 상태를 실시간 대시보드로 가시화했습니다.
+          </p>
+          <div style="margin-top: 15px;">
+            <a href="project-producer-consumer.html" class="btn btn-primary">자세히 보기 & 시뮬레이터 실행 <i class="fa-solid fa-play"></i></a>
+          </div>
+        </div>
+        <div class="project-image-wrap">
+          <img src="assets/producer_consumer.png" alt="Producer-Consumer problem simulator Showcase Image" class="project-image">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-layout">
+      <!-- Info links -->
+      <div class="contact-info">
+        <h3>Get in Touch</h3>
+        <p style="margin-bottom: 20px;">언제든지 협업 제안이나 질문이 있으시면 아래 연락망 또는 폼을 통해 연락해 주세요. 성실히 답변해 드리겠습니다.</p>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Email</h4>
+            <p>dev.sangjin.kim@gmail.com</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fa-brands fa-github"></i>
+          </div>
+          <div class="contact-details">
+            <h4>GitHub</h4>
+            <p>github.com/sangjin-kim</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fa-solid fa-square-rss"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Tech Blog</h4>
+            <p>velog.io/@sangjin-kim</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact form -->
+      <form class="glass-card contact-form" id="contact-form-el">
+        <div class="form-group">
+          <label for="contact-name">이름</label>
+          <input type="text" id="contact-name" class="form-control" placeholder="홍길동" required>
+        </div>
+        <div class="form-group">
+          <label for="contact-email">이메일 주소</label>
+          <input type="email" id="contact-email" class="form-control" placeholder="example@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="contact-subject">제목</label>
+          <input type="text" id="contact-subject" class="form-control" placeholder="협업 문의 드립니다." required>
+        </div>
+        <div class="form-group">
+          <label for="contact-message">메시지</label>
+          <textarea id="contact-message" class="form-control" placeholder="여기에 상세 내용을 입력하세요." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="btn-submit-contact">
+          <i class="fa-solid fa-paper-plane"></i> 메시지 전송
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-wrap"></div>
+
+  <!-- Footer -->
+  <footer>
+    <p class="footer-text">Visualizing complex system mechanisms beyond theory.</p>
+    <p class="footer-copyright">© 2026 Kim Sang-jin (Student ID: 2022136020). All rights reserved.</p>
+  </footer>
+
+  <script>
+    // ==========================================================================
+    // MOBILE NAVIGATION MENU
+    // ==========================================================================
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    mobileToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('open');
+      const isOpen = navMenu.classList.contains('open');
+      mobileToggle.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+    });
+
+    // Close mobile menu when clicking outside or on a link
+    document.addEventListener('click', (e) => {
+      if (!mobileToggle.contains(e.target) && !navMenu.contains(e.target)) {
+        navMenu.classList.remove('open');
+        mobileToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      }
+    });
+
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('open');
+        mobileToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      });
+    });
+
+
+    // ==========================================================================
+    // CUSTOM SMOOTH SCROLLING & SCROLL REVEAL (IntersectionObserver)
+    // ==========================================================================
+    const navLinks = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('section');
+    const headerEl = document.querySelector('header');
+    let scrollAnimationFrameId = null;
+
+    // Easing function: Cubic easeInOut
+    function cubicInOut(t) {
+      return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+    }
+
+    // Custom smooth scroll animation with overlap protection
+    function animatedScrollTo(targetY, duration) {
+      if (scrollAnimationFrameId) {
+        cancelAnimationFrame(scrollAnimationFrameId);
+      }
+      
+      const startY = window.scrollY || window.pageYOffset;
+      const difference = targetY - startY;
+      const startTime = performance.now();
+
+      function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeValue = cubicInOut(progress);
+        
+        window.scrollTo(0, startY + difference * easeValue);
+
+        if (progress < 1) {
+          scrollAnimationFrameId = window.requestAnimationFrame(step);
+        } else {
+          scrollAnimationFrameId = null;
+        }
+      }
+
+      scrollAnimationFrameId = window.requestAnimationFrame(step);
+    }
+
+    // Cancel scroll animation if user interacts manually
+    const cancelScrollOnInteraction = () => {
+      if (scrollAnimationFrameId) {
+        cancelAnimationFrame(scrollAnimationFrameId);
+        scrollAnimationFrameId = null;
+      }
+    };
+    window.addEventListener('wheel', cancelScrollOnInteraction, { passive: true });
+    window.addEventListener('touchmove', cancelScrollOnInteraction, { passive: true });
+
+    // Add click listeners to all hash links for seamless animated scrolling (including Logo, Nav, Buttons)
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const targetId = link.getAttribute('href');
+        if (targetId && targetId !== '#') {
+          e.preventDefault();
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            const headerHeight = headerEl ? headerEl.offsetHeight : 70;
+            const targetY = targetEl.getBoundingClientRect().top + window.scrollY - headerHeight;
+            animatedScrollTo(targetY, 1200); // 1.2 seconds elegant glide animation
+          }
+        }
+      });
+    });
+
+    // Scroll Down Arrow click listener
+    const scrollArrow = document.getElementById('scroll-arrow');
+    if (scrollArrow) {
+      scrollArrow.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetEl = document.getElementById('about');
+        if (targetEl) {
+          const headerHeight = headerEl ? headerEl.offsetHeight : 70;
+          const targetY = targetEl.getBoundingClientRect().top + window.scrollY - headerHeight;
+          animatedScrollTo(targetY, 1200);
+        }
+      });
+    }
+
+    // SCROLL REVEAL & SCROLL SPY OBSERVER
+    const spyOptions = {
+      root: null,
+      rootMargin: '-15% 0px -55% 0px', // Center active range
+      threshold: 0
+    };
+
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+        
+        // Active Link Highlight
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, spyOptions);
+
+    // Observer for scroll reveal (Slide up & fade in)
+    const revealOptions = {
+      root: null,
+      rootMargin: '0px 0px -10% 0px', // Trigger slightly before section enters viewport
+      threshold: 0.05
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+          // Once revealed, we can stop observing to keep it visible
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, revealOptions);
+
+    // Initialize observers
+    sections.forEach((section, idx) => {
+      spyObserver.observe(section);
+      revealObserver.observe(section);
+
+      // Instantly reveal first section (Home) on page load so it is visible immediately
+      if (idx === 0) {
+        section.classList.add('reveal-visible');
+      }
+    });
+
+
+    // ==========================================================================
+    // HERO CANVAS ANIMATION (MESH NETWORK EFFECT)
+    // ==========================================================================
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let particles = [];
+    let animationFrameId;
+
+    const mouse = {
+      x: null,
+      y: null,
+      radius: 120
+    };
+
+    // Track mouse position on body to capture movement anywhere on hero
+    window.addEventListener('mousemove', (e) => {
+      // Offset mouse coordinates based on canvas scroll offset
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+
+    window.addEventListener('mouseout', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    class Particle {
+      constructor(x, y, vx, vy, radius, color) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.radius = radius;
+        this.color = color;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+
+      update() {
+        // Bounce on boundary
+        if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+
+        // Mouse interaction
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            // Apply slight push force from mouse
+            const force = (mouse.radius - dist) / mouse.radius;
+            this.x -= (dx / dist) * force * 2;
+            this.y -= (dy / dist) * force * 2;
+          }
+        }
+
+        // Apply velocity
+        this.x += this.vx;
+        this.y += this.vy;
+
+        this.draw();
+      }
+    }
+
+    function initCanvas() {
+      // Resize canvas based on hero section size
+      const parentSection = document.getElementById('home');
+      canvas.width = parentSection.clientWidth;
+      canvas.height = parentSection.clientHeight;
+
+      particles = [];
+      const density = Math.floor((canvas.width * canvas.height) / 11000);
+      const limit = Math.min(density, 120); // Cap particles for performance
+
+      for (let i = 0; i < limit; i++) {
+        const radius = Math.random() * 2 + 1;
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const vx = (Math.random() - 0.5) * 0.5;
+        const vy = (Math.random() - 0.5) * 0.5;
+        // Apple-style clean monochrome particles
+        const color = 'rgba(0, 113, 227, 0.15)';
+        particles.push(new Particle(x, y, vx, vy, radius, color));
+      }
+    }
+
+    function connectParticles() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 100) {
+            const opacity = (100 - dist) / 100 * 0.08;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 113, 227, ${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => p.update());
+      connectParticles();
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(animationFrameId);
+      initCanvas();
+      animate();
+    });
+
+    // Initialize Hero Mesh Animation
+    initCanvas();
+    animate();
+
+
+    // ==========================================================================
+    // PRODUCER-CONSUMER PROBLEM SIMULATOR LOGIC
+    // ==========================================================================
+    const circularBufferEl = document.getElementById('circular-buffer');
+    const inValEl = document.getElementById('in-val');
+    const outValEl = document.getElementById('out-val');
+    const semNrfullEl = document.getElementById('sem-nrfull');
+    const semNremptyEl = document.getElementById('sem-nrempty');
+    const semMutexEl = document.getElementById('sem-mutex');
+    const qProducersEl = document.getElementById('queue-producers');
+    const qConsumersEl = document.getElementById('queue-consumers');
+    const consoleLogsEl = document.getElementById('sim-logs');
+    const stepCounterEl = document.getElementById('step-counter');
+
+    const btnParse = document.getElementById('btn-parse');
+    const btnRun = document.getElementById('btn-run');
+    const btnPause = document.getElementById('btn-pause');
+    const btnStep = document.getElementById('btn-step');
+    const btnReset = document.getElementById('btn-reset');
+    const speedSlider = document.getElementById('speed-slider');
+    const speedValEl = document.getElementById('speed-val');
+    const scenarioInput = document.getElementById('scenario-input');
+
+    const BUFFER_SIZE = 8;
+    let buffer = Array(BUFFER_SIZE).fill(null);
+    let inPtr = 0;
+    let outPtr = 0;
+    let nrfull = 0;
+    let nrempty = BUFFER_SIZE;
+    let mutex = 1;
+
+    let waitingProducers = []; // List of IDs
+    let waitingConsumers = []; // List of IDs
+    let producerCount = 0; // Cumulative ID tracking
+    let consumerCount = 0; // Cumulative ID tracking
+
+    let commands = [];
+    let currentCmdIndex = 0;
+    let isRunning = false;
+    let runIntervalId = null;
+
+    // Build Circular buffer slots in HTML
+    function buildBufferDOM() {
+      circularBufferEl.innerHTML = '';
+      for (let i = 0; i < BUFFER_SIZE; i++) {
+        const angle = i * 45; // 360 / 8 = 45 deg
+        const slot = document.createElement('div');
+        slot.className = 'buffer-slot';
+        slot.id = `slot-${i}`;
+        // Calculate absolute position on a circle
+        // transform: rotate(calc(45deg * var(--i))) translate(110px) rotate(calc(-45deg * var(--i)))
+        slot.style.transform = `rotate(${angle}deg) translate(95px) rotate(-${angle}deg)`;
+        slot.innerHTML = `
+          <span class="buffer-slot-index">${i}</span>
+          <span class="buffer-slot-value">-</span>
+        `;
+        circularBufferEl.appendChild(slot);
+      }
+    }
+    buildBufferDOM();
+
+    function addSimLog(text, type = 'system') {
+      const logItem = document.createElement('div');
+      logItem.className = `log-item ${type}`;
+      
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+      logItem.innerHTML = `[${timeStr}] ${text}`;
+      
+      consoleLogsEl.appendChild(logItem);
+      consoleLogsEl.scrollTop = consoleLogsEl.scrollHeight;
+    }
+
+    function updateVisuals() {
+      // Update semaphore values
+      semNrfullEl.textContent = nrfull;
+      semNremptyEl.textContent = nrempty;
+      semMutexEl.textContent = mutex;
+
+      // Update pointer values
+      inValEl.textContent = inPtr;
+      outValEl.textContent = outPtr;
+
+      // Update slots filled state & active pointer borders
+      for (let i = 0; i < BUFFER_SIZE; i++) {
+        const slotEl = document.getElementById(`slot-${i}`);
+        const valueEl = slotEl.querySelector('.buffer-slot-value');
+
+        // Check if slot holds data
+        if (buffer[i] !== null) {
+          slotEl.classList.add('filled');
+          valueEl.textContent = buffer[i];
+        } else {
+          slotEl.classList.remove('filled');
+          valueEl.textContent = '-';
+        }
+
+        // Pointer highlight states
+        slotEl.classList.remove('active-in', 'active-out', 'active-both');
+        if (i === inPtr && i === outPtr) {
+          slotEl.classList.add('active-both');
+        } else if (i === inPtr) {
+          slotEl.classList.add('active-in');
+        } else if (i === outPtr) {
+          slotEl.classList.add('active-out');
+        }
+      }
+
+      // Update queues
+      qProducersEl.innerHTML = '';
+      if (waitingProducers.length === 0) {
+        qProducersEl.innerHTML = '<span class="empty-queue-msg">대기중 없음</span>';
+      } else {
+        waitingProducers.forEach(pid => {
+          const span = document.createElement('span');
+          span.className = 'queue-item producer-node';
+          span.textContent = `P${pid}`;
+          qProducersEl.appendChild(span);
+        });
+      }
+
+      qConsumersEl.innerHTML = '';
+      if (waitingConsumers.length === 0) {
+        qConsumersEl.innerHTML = '<span class="empty-queue-msg">대기중 없음</span>';
+      } else {
+        waitingConsumers.forEach(cid => {
+          const span = document.createElement('span');
+          span.className = 'queue-item consumer-node';
+          span.textContent = `C${cid}`;
+          qConsumersEl.appendChild(span);
+        });
+      }
+
+      // Step status text
+      stepCounterEl.textContent = `Step: ${currentCmdIndex}/${commands.length}`;
+    }
+
+    function parseScenario() {
+      const text = scenarioInput.value;
+      // Filter clean inputs
+      commands = text.split(',')
+        .map(cmd => cmd.trim().toUpperCase())
+        .filter(cmd => cmd === 'P' || cmd === 'C');
+      
+      currentCmdIndex = 0;
+      resetSimulationState();
+      addSimLog(`[시스템] 시나리오 파싱 완료: [ ${commands.join(', ')} ] (${commands.length}개 명령)`, 'system');
+      updateVisuals();
+    }
+
+    function resetSimulationState() {
+      buffer.fill(null);
+      inPtr = 0;
+      outPtr = 0;
+      nrfull = 0;
+      nrempty = BUFFER_SIZE;
+      mutex = 1;
+      waitingProducers = [];
+      waitingConsumers = [];
+      producerCount = 0;
+      consumerCount = 0;
+      currentCmdIndex = 0;
+      pauseSimulation();
+    }
+
+    function executeStep() {
+      if (commands.length === 0) {
+        addSimLog(`[시스템] 실행 가능한 시나리오 명령어가 없습니다.`, 'system');
+        pauseSimulation();
+        return;
+      }
+
+      if (currentCmdIndex >= commands.length) {
+        // If scenario is complete, but we still have blocked processes in queues, try to drain them
+        if (waitingProducers.length > 0 && nrempty > 0) {
+          wakeUpProducer();
+          updateVisuals();
+          return;
+        }
+        if (waitingConsumers.length > 0 && nrfull > 0) {
+          wakeUpConsumer();
+          updateVisuals();
+          return;
+        }
+
+        addSimLog(`[시스템] 시나리오의 모든 명령이 끝났습니다.`, 'system');
+        pauseSimulation();
+        return;
+      }
+
+      const currentCmd = commands[currentCmdIndex];
+      currentCmdIndex++;
+
+      if (currentCmd === 'P') {
+        producerCount++;
+        const currentId = producerCount;
+        addSimLog(`[생산자 P${currentId}] 실행 요청`, 'system');
+
+        // Check buffer space
+        if (nrfull >= BUFFER_SIZE) {
+          // Blocked
+          waitingProducers.push(currentId);
+          addSimLog(`[임계영역] 버퍼 가득 참 (nrfull=8). P${currentId} 대기열(Blocked Queue)로 진입`, 'wait');
+        } else {
+          // Can write
+          mutex = 0; // Lock
+          buffer[inPtr] = `D${currentId}`;
+          const prevIn = inPtr;
+          inPtr = (inPtr + 1) % BUFFER_SIZE;
+          nrfull++;
+          nrempty--;
+          addSimLog(`[생산자 P${currentId}] Buffer[${prevIn}]에 'D${currentId}' 저장 (in: ${prevIn} -> ${inPtr})`, 'produce');
+          mutex = 1; // Unlock
+
+          // Wake up any waiting consumers since we produced an item
+          if (waitingConsumers.length > 0) {
+            wakeUpConsumer();
+          }
+        }
+      } else if (currentCmd === 'C') {
+        consumerCount++;
+        const currentId = consumerCount;
+        addSimLog(`[소비자 C${currentId}] 실행 요청`, 'system');
+
+        // Check buffer data presence
+        if (nrfull === 0) {
+          // Blocked
+          waitingConsumers.push(currentId);
+          addSimLog(`[임계영역] 버퍼 비어있음 (nrfull=0). C${currentId} 대기열(Blocked Queue)로 진입`, 'wait');
+        } else {
+          // Can read
+          mutex = 0; // Lock
+          const prevOut = outPtr;
+          const val = buffer[outPtr];
+          buffer[outPtr] = null;
+          outPtr = (outPtr + 1) % BUFFER_SIZE;
+          nrfull--;
+          nrempty++;
+          addSimLog(`[소비자 C${currentId}] Buffer[${prevOut}]에서 '${val}' 읽기 완료 (out: ${prevOut} -> ${outPtr})`, 'consume');
+          mutex = 1; // Unlock
+
+          // Wake up any waiting producers since we freed a slot
+          if (waitingProducers.length > 0) {
+            wakeUpProducer();
+          }
+        }
+      }
+
+      updateVisuals();
+    }
+
+    function wakeUpConsumer() {
+      if (waitingConsumers.length === 0) return;
+      const cid = waitingConsumers.shift();
+      
+      mutex = 0; // Lock
+      const prevOut = outPtr;
+      const val = buffer[outPtr];
+      buffer[outPtr] = null;
+      outPtr = (outPtr + 1) % BUFFER_SIZE;
+      nrfull--;
+      nrempty++;
+      addSimLog(`[대기 해제] 대기 중이던 C${cid} 재동작. Buffer[${prevOut}]에서 '${val}' 읽음 (out: ${prevOut} -> ${outPtr})`, 'wake');
+      mutex = 1; // Unlock
+    }
+
+    function wakeUpProducer() {
+      if (waitingProducers.length === 0) return;
+      const pid = waitingProducers.shift();
+      
+      mutex = 0; // Lock
+      buffer[inPtr] = `D${pid}`;
+      const prevIn = inPtr;
+      inPtr = (inPtr + 1) % BUFFER_SIZE;
+      nrfull++;
+      nrempty--;
+      addSimLog(`[대기 해제] 대기 중이던 P${pid} 재동작. Buffer[${prevIn}]에 'D${pid}' 저장 (in: ${prevIn} -> ${inPtr})`, 'wake');
+      mutex = 1; // Unlock
+    }
+
+    function runSimulation() {
+      if (isRunning) return;
+      isRunning = true;
+      btnRun.disabled = true;
+      btnPause.disabled = false;
+      btnStep.disabled = true;
+      btnParse.disabled = true;
+      scenarioInput.disabled = true;
+
+      const speed = parseInt(speedSlider.value, 10);
+      runIntervalId = setInterval(() => {
+        executeStep();
+      }, speed);
+      addSimLog(`[시스템] 시뮬레이션 자동 실행 개시 (속도: ${speed}ms)`, 'system');
+    }
+
+    function pauseSimulation() {
+      if (!isRunning) return;
+      isRunning = false;
+      btnRun.disabled = false;
+      btnPause.disabled = true;
+      btnStep.disabled = false;
+      btnParse.disabled = false;
+      scenarioInput.disabled = false;
+
+      if (runIntervalId) {
+        clearInterval(runIntervalId);
+        runIntervalId = null;
+      }
+      addSimLog(`[시스템] 시뮬레이션 일시정지`, 'system');
+    }
+
+    // Connect Simulator UI Events
+    btnParse.addEventListener('click', parseScenario);
+
+    btnRun.addEventListener('click', runSimulation);
+
+    btnPause.addEventListener('click', pauseSimulation);
+
+    btnStep.addEventListener('click', executeStep);
+
+    btnReset.addEventListener('click', () => {
+      resetSimulationState();
+      addSimLog(`[시스템] 시뮬레이터 초기화 완료`, 'system');
+      updateVisuals();
+    });
+
+    speedSlider.addEventListener('input', () => {
+      const speed = speedSlider.value;
+      speedValEl.textContent = speed;
+      if (isRunning) {
+        // Hot-restart interval to apply speed change immediately
+        clearInterval(runIntervalId);
+        runIntervalId = setInterval(() => {
+          executeStep();
+        }, speed);
+      }
+    });
+
+    // Parse initial state
+    parseScenario();
+
+
+    // ==========================================================================
+    // CONTACT FORM SUBMISSION WITH CUSTOM TOAST ALERTS
+    // ==========================================================================
+    const contactForm = document.getElementById('contact-form-el');
+    const toastWrap = document.getElementById('toast-wrap');
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      let icon = '<i class="fa-solid fa-check"></i>';
+      if (type === 'error') {
+        icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+      }
+      
+      toast.innerHTML = `
+        ${icon}
+        <span>${message}</span>
+      `;
+      
+      toastWrap.appendChild(toast);
+      
+      // Trigger animations
+      setTimeout(() => {
+        toast.classList.add('show');
+      }, 50);
+
+      // Auto remove toast
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.remove();
+        }, 400);
+      }, 3500);
+    }
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const subject = document.getElementById('contact-subject').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+
+      if (!name || !email || !subject || !message) {
+        showToast('모든 양식을 작성해 주세요!', 'error');
+        return;
+      }
+
+      // Mimic server communication
+      document.getElementById('btn-submit-contact').disabled = true;
+      document.getElementById('btn-submit-contact').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 전송 중...';
+
+      setTimeout(() => {
+        showToast(`반갑습니다, ${name}님! 문의 메시지가 성공적으로 송신되었습니다.`, 'success');
+        contactForm.reset();
+        document.getElementById('btn-submit-contact').disabled = false;
+        document.getElementById('btn-submit-contact').innerHTML = '<i class="fa-solid fa-paper-plane"></i> 메시지 전송';
+      }, 1500);
+    });
+
+  </script>
+</body>
+</html>
